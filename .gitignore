@@ -8,3 +8,6 @@
 
 # kde
 .kate-swp
+
+# java compiler
+/out
