@@ -589,3 +589,407 @@ class Deck {
         }
     }
 }
+
+/* --- RUN OUTPUT ---------------------------------------------------------- *\
+==== Card Tests ================================
+card1: A♠ (test: default card)
+card2: 2♥ (test: valid card)
+card3: �� (test: invalid card)
+card2: �� (test: valid -> invalid card)
+card3: T♦ (test: invalid -> valid card)
+==== Hand Tests ================================
+filled hand: { A♥, 2♥, 3♥, 4♥, 5♥, A♥, 2♥, 3♥, 4♥, 5♥, A♥, 2♥, 3♥, 4♥, 5♥, A♥, 2♥, 3♥, 4♥, 5♥, A♥, 2♥, 3♥, 4♥, 5♥, A♥, 2♥, 3♥, 4♥, 5♥, A♥, 2♥, 3♥, 4♥, 5♥, A♥, 2♥, 3♥, 4♥, 5♥, A♥, 2♥, 3♥, 4♥, 5♥, A♥, 2♥, 3♥, 4♥, 5♥ }
+inspect: A♥ (valid)
+inspect: �� (invalid)
+played card: 5♥
+played card: 4♥
+played card: 3♥
+played card: 2♥
+played card: A♥
+played card: 5♥
+played card: 4♥
+played card: 3♥
+played card: 2♥
+played card: A♥
+played card: 5♥
+played card: 4♥
+played card: 3♥
+played card: 2♥
+played card: A♥
+played card: 5♥
+played card: 4♥
+played card: 3♥
+played card: 2♥
+played card: A♥
+played card: 5♥
+played card: 4♥
+played card: 3♥
+played card: 2♥
+played card: A♥
+played card: 5♥
+played card: 4♥
+played card: 3♥
+played card: 2♥
+played card: A♥
+played card: 5♥
+played card: 4♥
+played card: 3♥
+played card: 2♥
+played card: A♥
+played card: 5♥
+played card: 4♥
+played card: 3♥
+played card: 2♥
+played card: A♥
+played card: 5♥
+played card: 4♥
+played card: 3♥
+played card: 2♥
+played card: A♥
+played card: 5♥
+played card: 4♥
+played card: 3♥
+played card: 2♥
+played card: A♥
+emptied hand: { empty }
+==== Deck Tests ================================
+--- 2 packs unshuffled -------------------------
+dealt card: K♠
+dealt card: K♥
+dealt card: K♦
+dealt card: K♣
+dealt card: Q♠
+dealt card: Q♥
+dealt card: Q♦
+dealt card: Q♣
+dealt card: J♠
+dealt card: J♥
+dealt card: J♦
+dealt card: J♣
+dealt card: T♠
+dealt card: T♥
+dealt card: T♦
+dealt card: T♣
+dealt card: 9♠
+dealt card: 9♥
+dealt card: 9♦
+dealt card: 9♣
+dealt card: 8♠
+dealt card: 8♥
+dealt card: 8♦
+dealt card: 8♣
+dealt card: 7♠
+dealt card: 7♥
+dealt card: 7♦
+dealt card: 7♣
+dealt card: 6♠
+dealt card: 6♥
+dealt card: 6♦
+dealt card: 6♣
+dealt card: 5♠
+dealt card: 5♥
+dealt card: 5♦
+dealt card: 5♣
+dealt card: 4♠
+dealt card: 4♥
+dealt card: 4♦
+dealt card: 4♣
+dealt card: 3♠
+dealt card: 3♥
+dealt card: 3♦
+dealt card: 3♣
+dealt card: 2♠
+dealt card: 2♥
+dealt card: 2♦
+dealt card: 2♣
+dealt card: A♠
+dealt card: A♥
+dealt card: A♦
+dealt card: A♣
+dealt card: K♠
+dealt card: K♥
+dealt card: K♦
+dealt card: K♣
+dealt card: Q♠
+dealt card: Q♥
+dealt card: Q♦
+dealt card: Q♣
+dealt card: J♠
+dealt card: J♥
+dealt card: J♦
+dealt card: J♣
+dealt card: T♠
+dealt card: T♥
+dealt card: T♦
+dealt card: T♣
+dealt card: 9♠
+dealt card: 9♥
+dealt card: 9♦
+dealt card: 9♣
+dealt card: 8♠
+dealt card: 8♥
+dealt card: 8♦
+dealt card: 8♣
+dealt card: 7♠
+dealt card: 7♥
+dealt card: 7♦
+dealt card: 7♣
+dealt card: 6♠
+dealt card: 6♥
+dealt card: 6♦
+dealt card: 6♣
+dealt card: 5♠
+dealt card: 5♥
+dealt card: 5♦
+dealt card: 5♣
+dealt card: 4♠
+dealt card: 4♥
+dealt card: 4♦
+dealt card: 4♣
+dealt card: 3♠
+dealt card: 3♥
+dealt card: 3♦
+dealt card: 3♣
+dealt card: 2♠
+dealt card: 2♥
+dealt card: 2♦
+dealt card: 2♣
+dealt card: A♠
+dealt card: A♥
+dealt card: A♦
+dealt card: A♣
+--- 2 packs shuffled ---------------------------
+dealt card: T♦
+dealt card: 2♥
+dealt card: 6♥
+dealt card: 9♠
+dealt card: J♠
+dealt card: 4♣
+dealt card: 6♠
+dealt card: 3♥
+dealt card: 3♣
+dealt card: 8♥
+dealt card: 3♠
+dealt card: 5♣
+dealt card: 5♦
+dealt card: 7♠
+dealt card: 5♠
+dealt card: 4♥
+dealt card: A♠
+dealt card: 7♦
+dealt card: 2♣
+dealt card: A♠
+dealt card: 7♦
+dealt card: 8♥
+dealt card: Q♠
+dealt card: 4♠
+dealt card: T♣
+dealt card: 9♣
+dealt card: 6♣
+dealt card: 8♦
+dealt card: 4♦
+dealt card: T♥
+dealt card: Q♣
+dealt card: J♣
+dealt card: Q♠
+dealt card: T♣
+dealt card: 5♠
+dealt card: K♦
+dealt card: 5♦
+dealt card: 7♣
+dealt card: K♥
+dealt card: K♠
+dealt card: J♦
+dealt card: 3♠
+dealt card: K♣
+dealt card: A♦
+dealt card: 2♥
+dealt card: A♣
+dealt card: 4♠
+dealt card: 4♥
+dealt card: 2♣
+dealt card: 9♦
+dealt card: 5♥
+dealt card: 6♦
+dealt card: 8♣
+dealt card: 4♦
+dealt card: 5♣
+dealt card: 8♠
+dealt card: 3♣
+dealt card: 8♣
+dealt card: A♥
+dealt card: Q♣
+dealt card: 7♥
+dealt card: Q♥
+dealt card: K♠
+dealt card: 9♥
+dealt card: Q♦
+dealt card: A♥
+dealt card: T♦
+dealt card: 3♦
+dealt card: K♥
+dealt card: A♣
+dealt card: J♥
+dealt card: 7♣
+dealt card: 6♠
+dealt card: 2♦
+dealt card: A♦
+dealt card: 3♥
+dealt card: T♠
+dealt card: 9♣
+dealt card: J♦
+dealt card: 6♥
+dealt card: 7♥
+dealt card: 9♥
+dealt card: 8♠
+dealt card: 9♦
+dealt card: 8♦
+dealt card: Q♦
+dealt card: T♠
+dealt card: 3♦
+dealt card: 2♦
+dealt card: J♥
+dealt card: J♣
+dealt card: 7♠
+dealt card: 2♠
+dealt card: 6♣
+dealt card: J♠
+dealt card: 2♠
+dealt card: K♣
+dealt card: Q♥
+dealt card: 6♦
+dealt card: 5♥
+dealt card: T♥
+dealt card: 4♣
+dealt card: 9♠
+dealt card: K♦
+--- 1 pack unshuffled --------------------------
+dealt card: K♠
+dealt card: K♥
+dealt card: K♦
+dealt card: K♣
+dealt card: Q♠
+dealt card: Q♥
+dealt card: Q♦
+dealt card: Q♣
+dealt card: J♠
+dealt card: J♥
+dealt card: J♦
+dealt card: J♣
+dealt card: T♠
+dealt card: T♥
+dealt card: T♦
+dealt card: T♣
+dealt card: 9♠
+dealt card: 9♥
+dealt card: 9♦
+dealt card: 9♣
+dealt card: 8♠
+dealt card: 8♥
+dealt card: 8♦
+dealt card: 8♣
+dealt card: 7♠
+dealt card: 7♥
+dealt card: 7♦
+dealt card: 7♣
+dealt card: 6♠
+dealt card: 6♥
+dealt card: 6♦
+dealt card: 6♣
+dealt card: 5♠
+dealt card: 5♥
+dealt card: 5♦
+dealt card: 5♣
+dealt card: 4♠
+dealt card: 4♥
+dealt card: 4♦
+dealt card: 4♣
+dealt card: 3♠
+dealt card: 3♥
+dealt card: 3♦
+dealt card: 3♣
+dealt card: 2♠
+dealt card: 2♥
+dealt card: 2♦
+dealt card: 2♣
+dealt card: A♠
+dealt card: A♥
+dealt card: A♦
+dealt card: A♣
+--- 1 pack shuffled ----------------------------
+dealt card: 3♦
+dealt card: K♥
+dealt card: Q♥
+dealt card: 6♣
+dealt card: J♠
+dealt card: 4♥
+dealt card: K♣
+dealt card: Q♠
+dealt card: 7♣
+dealt card: 7♥
+dealt card: 2♥
+dealt card: K♠
+dealt card: 5♦
+dealt card: 5♣
+dealt card: 4♠
+dealt card: J♣
+dealt card: Q♣
+dealt card: Q♦
+dealt card: 6♥
+dealt card: 7♠
+dealt card: A♣
+dealt card: 3♣
+dealt card: 2♠
+dealt card: A♥
+dealt card: 8♥
+dealt card: T♥
+dealt card: 9♠
+dealt card: T♦
+dealt card: J♦
+dealt card: 9♦
+dealt card: 3♥
+dealt card: 2♦
+dealt card: J♥
+dealt card: 8♦
+dealt card: 9♥
+dealt card: T♠
+dealt card: 2♣
+dealt card: 6♠
+dealt card: T♣
+dealt card: A♦
+dealt card: 7♦
+dealt card: 9♣
+dealt card: 3♠
+dealt card: K♦
+dealt card: 8♠
+dealt card: 5♠
+dealt card: 4♣
+dealt card: 6♦
+dealt card: 5♥
+dealt card: 8♣
+dealt card: A♠
+dealt card: 4♦
+==== Deck + Hand Tests =========================
+How many players are joining this game?
+9
+--- 1 pack unshuffled --------------------------
+hand #0: { K♠, J♥, 9♦, 7♣, 4♠, 2♥ }
+hand #1: { K♥, J♦, 9♣, 6♠, 4♥, 2♦ }
+hand #2: { K♦, J♣, 8♠, 6♥, 4♦, 2♣ }
+hand #3: { K♣, T♠, 8♥, 6♦, 4♣, A♠ }
+hand #4: { Q♠, T♥, 8♦, 6♣, 3♠, A♥ }
+hand #5: { Q♥, T♦, 8♣, 5♠, 3♥, A♦ }
+hand #6: { Q♦, T♣, 7♠, 5♥, 3♦, A♣ }
+hand #7: { Q♣, 9♠, 7♥, 5♦, 3♣ }
+hand #8: { J♠, 9♥, 7♦, 5♣, 2♠ }
+--- 1 pack shuffled ----------------------------
+hand #0: { T♣, 2♦, A♣, 8♦, K♣, 4♥ }
+hand #1: { 5♠, A♥, 3♦, K♦, A♦, T♠ }
+hand #2: { 2♠, 2♣, 7♠, Q♠, 5♥, J♣ }
+hand #3: { J♦, 6♣, 7♥, 3♣, Q♥, J♥ }
+hand #4: { T♦, 4♠, 4♣, 8♣, 5♦, 8♥ }
+hand #5: { 4♦, 8♠, 9♥, 3♥, K♥, A♠ }
+hand #6: { 3♠, 6♥, K♠, J♠, Q♦, 7♣ }
+hand #7: { 6♠, Q♣, 9♣, 9♠, 2♥ }
+hand #8: { 9♦, T♥, 5♣, 6♦, 7♦ }
+\* ------------------------------------------------------------------------- */
