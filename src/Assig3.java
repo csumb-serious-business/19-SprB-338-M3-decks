@@ -67,7 +67,7 @@ public class Assig3 {
 
         // print emptied hand
         System.out.printf("emptied hand: %s%n", hand);
-
+        
         //TODO: MBR -- test cases
     }
 }
@@ -253,5 +253,114 @@ class Hand {
 }
 
 class Deck {
-    //TODO: R Talmage
+	public static int MAX_CARDS = 6 * 52; //establishes a maximum amount of cards for a single Deck
+	private static Card[]  masterpack;    // the masterpack, a single pack of cards with no special cards
+	private Card[] cards;                 //an array of all the cards in the current deck object
+	public int numPacks;                  //the number of packs in the current deck
+	private int topCard;                  //an int to keep track of the index of the top card
+	
+	private static void allocateMasterPack() { //creates the masterpack, which is a standard deck of cards to reuse each time we make a new Deck
+		int c = 0;                             //this will only be called on the first instance of the class being constructed
+		String VALID_VALUE_CHARS = "A23456789TJQK";
+		masterpack = new Card[52];
+		while(c < 52) {
+			for(int i = 0; i < VALID_VALUE_CHARS.length(); i++) {
+				masterpack[c] = new Card(VALID_VALUE_CHARS.charAt(i), Suit.clubs);
+				c++;
+				masterpack[c] = new Card(VALID_VALUE_CHARS.charAt(i), Suit.diamonds);
+				c++;
+				masterpack[c] = new Card(VALID_VALUE_CHARS.charAt(i), Suit.hearts);
+				c++;
+				masterpack[c] = new Card(VALID_VALUE_CHARS.charAt(i), Suit.spades);
+				c++;
+			}
+		}
+	}
+	
+	public Deck(int numPacks) {  //Deck constructor that takes an int numPacks which creates a deck with numPacks packs
+		int numCards = numPacks * 52;
+		this.numPacks = numPacks;
+		topCard = numCards - 1;
+		this.cards = new Card[numCards];
+		if (numCards > MAX_CARDS) {
+			System.out.println("Maximun amount of cards exceeded, number of packs set to 6");
+			numCards = MAX_CARDS;
+			this.numPacks = 6;
+			topCard = numCards - 1;
+		}
+		if (masterpack == null) {
+			allocateMasterPack();
+		}
+		for( int i = 0; i < numCards; i++) {
+			cards[i] = masterpack[i%52];
+		}
+	}
+	
+	public Deck() { //Deck constructor which takes no parameters and creates a Deck with one pack
+		topCard = 51;
+		this.numPacks = 1;
+		if (masterpack.length == 0) {
+			allocateMasterPack();
+		}
+		for(int i = 0; i< 52; i++) {
+			cards[i] = masterpack[i];
+		}
+	}
+	
+	public void init(int numPacks) { //reinitializes an existing Deck object with a chosen number of packs
+		int numCards = numPacks * 52;
+		topCard = numCards - 1;
+		this.numPacks = numPacks;
+		if (numCards > MAX_CARDS) {
+			System.out.println("Maximun amount of cards exceeded, number of packs set to 6");
+			numCards = MAX_CARDS;
+			this.numPacks = 6;
+			topCard = numCards - 1;
+		}
+		for( int i = 0; i < numCards; i++) {
+			cards[i] = masterpack[i%52];
+		}
+	}
+	
+	public void init() { //reinitializes an existing Deck object with one pack
+		int numCards = this.numPacks * 52;
+		topCard = numCards - 1;
+		for( int i = 0; i < numCards; i++) {
+			cards[i] = masterpack[i%52];
+		}
+	}
+	
+	public Card dealCard() { //returns the top card of the deck and removes it
+		Card dealtCard = cards[topCard];
+		cards[topCard] = null;
+		topCard--;
+		return dealtCard;
+	}
+	
+	public int getTopCard() { //returns the topCard integer
+		return this.topCard;
+	}
+	
+	public Card inspectCard(int k) { //takes an integer and accesses the deck at that index and returns a card object
+		if( k <= topCard) {
+			Card card =cards[k];
+			return card;
+		}
+		else return new Card('X', Suit.diamonds); //returns a card with errorFlag if index is out of range
+	}
+	
+	private void swap(int cardA, int cardB) { //helper function for shuffle, takes two ints and swaps the cards at those indexes
+		Card tempCard = cards[cardA];
+		cards[cardA] = cards[cardB];
+		cards[cardB] = tempCard;
+	}
+	
+	public void shuffle() { //goes through the deck 100 * the number of packs times and swaps two random cards each pass
+		int numCards = 52*this.numPacks;
+		for (int i = 0; i < this.numPacks * 100; i++) {
+			int cardA = (int)(Math.random() * numCards);
+			int cardB = (int)(Math.random() * numCards);
+			swap(cardA, cardB);
+		}
+	}
 }
