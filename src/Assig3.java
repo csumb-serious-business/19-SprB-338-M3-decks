@@ -5,13 +5,56 @@ Assignment: M3 Decks of Cards
 Date:       3/26/2019
 \* ------------------------------------------------------------------------- */
 
+import java.util.Scanner;
 import java.util.StringJoiner;
 
 enum Suit {clubs, diamonds, hearts, spades}
 
 public class Assig3 {
+    private static Scanner scanner;
+
+    /**
+     * Prompts the user for number of players (input)
+     * note: continues prompting until number is valid
+     *
+     * @return user provided player count for a card game
+     */
+    private static int askPlayerCount() {
+        if (Assig3.scanner == null) {
+            Assig3.scanner = new Scanner(System.in);
+        }
+
+        while (true) {
+            System.out.println("How many players are joining this game?");
+            int players = scanner.nextInt();
+            if (0 < players && players <= 10) {
+                return players;
+            }
+            System.out.printf("%d is not a valid number of players, try again.\n", players);
+        }
+    }
+
+    private static void dealDeckIntoHands(Deck deck, Hand[] hands) {
+        //deal cards among the hands until deck is empty
+        while (true) {
+            for (int h = 0; h < hands.length; h++) {
+                if (hands[h] == null) {
+                    hands[h] = new Hand();
+                }
+
+                if (deck.getTopCard() >= 0) {
+                    Card dealt = deck.dealCard();
+                    hands[h].takeCard(dealt);
+                } else {
+                    return;
+                }
+            }
+        }
+    }
+
+
     public static void main(String[] args) {
-        // test Card
+        System.out.println("==== Card Tests ================================");
         // init & print test cards
         Card card1 = new Card();
         System.out.printf("card1: %s (test: default card)%n", card1);
@@ -28,7 +71,7 @@ public class Assig3 {
         card3.set('T', Suit.diamonds);
         System.out.printf("card3: %s (test: invalid -> valid card)%n", card3);
 
-        // test Hand
+        System.out.println("==== Hand Tests ================================");
         // init 5 valid cards
         Card hCard1 = new Card('A', Suit.hearts);
         Card hCard2 = new Card('2', Suit.hearts);
@@ -67,32 +110,145 @@ public class Assig3 {
 
         // print emptied hand
         System.out.printf("emptied hand: %s%n", hand);
-        
-        //TODO: MBR -- test cases
+
+        System.out.println("==== Deck Tests ================================");
+        // init deck with 2 packs
+        Deck deck = new Deck(2);
+
+        // in a loop, until deck is empty
+        // dealCard & print that card
+        System.out.println("--- 2 packs unshuffled -------------------------");
+        while (deck.getTopCard() >= 0) {
+            Card dealt = deck.dealCard();
+            System.out.printf("dealt card: %s%n", dealt);
+        }
+
+        // reset (init) deck with 2 packs
+        deck.init(2);
+
+        System.out.println("--- 2 packs shuffled ---------------------------");
+        // shuffle deck
+        deck.shuffle();
+
+        // in a loop, until deck is empty
+        // dealCard & print that card
+        while (deck.getTopCard() >= 0) {
+            Card dealt = deck.dealCard();
+            System.out.printf("dealt card: %s%n", dealt);
+        }
+
+        System.out.println("--- 1 pack unshuffled --------------------------");
+        // reset (init) deck with 1 pack
+        deck.init();
+
+        // in a loop, until deck is empty
+        // dealCard & print that card
+        // dealCard & print that card
+        while (deck.getTopCard() >= 0) {
+            Card dealt = deck.dealCard();
+            System.out.printf("dealt card: %s%n", dealt);
+        }
+
+        System.out.println("--- 1 pack shuffled ----------------------------");
+        // reset (init) deck
+        deck.init();
+
+        // shuffle deck
+        deck.shuffle();
+
+        // in a loop, until deck is empty
+        // dealCard & print that card
+        while (deck.getTopCard() >= 0) {
+            Card dealt = deck.dealCard();
+            System.out.printf("dealt card: %s%n", dealt);
+        }
+
+        System.out.println("==== Deck + Hand Tests =========================");
+        // ask user for # of players (1-10), until valid
+        int players = Assig3.askPlayerCount();
+
+        System.out.println("--- 1 pack unshuffled --------------------------");
+        //new deck with 1 pack
+        Deck dhDeck = new Deck();
+        Hand[] playerHands = new Hand[players];
+
+        //deal cards among the hands until deck is empty
+        dealDeckIntoHands(dhDeck, playerHands);
+
+        //for each hand, display their contents.
+        for (int h = 0; h < playerHands.length; h++) {
+            System.out.printf("hand #%d: %s\n", h, playerHands[h]);
+        }
+
+
+        System.out.println("--- 1 pack shuffled ----------------------------");
+        //reset the deck
+        dhDeck.init();
+
+        //reset each hand
+        for (Hand playerHand : playerHands) {
+            playerHand.resetHand();
+        }
+
+        //shuffle the deck
+        dhDeck.shuffle();
+
+        //deal cards among the hands until deck is empty
+        dealDeckIntoHands(dhDeck, playerHands);
+
+        //for each hand, display their contents.
+        for (int h = 0; h < playerHands.length; h++) {
+            System.out.printf("hand #%d: %s\n", h, playerHands[h]);
+        }
     }
 }
 
-
+/**
+ * Represents a single playing card with a suit and value
+ */
 class Card {
-    private static final String VALID_VALUE_CHARS = "A23456789TJQK";
+    public static final String VALID_VALUE_CHARS = "A23456789TJQK";
     private char value;
     private Suit suit;
     private boolean errorFlag;
 
+    /**
+     * Create a default card, an Ace of Spades
+     */
     public Card() {
         this('A', Suit.spades);
     }
 
+    /**
+     * Create a card with a given value and suit
+     *
+     * @param value the card's value
+     * @param suit  the card's suit
+     */
     public Card(char value, Suit suit) {
         set(value, suit);
     }
 
+    /**
+     * Evaluates whether a given value/suit combination results in a valid card
+     *
+     * @param value the value to check
+     * @param suit  the suit to check
+     * @return true if the combination of value/suit is valid for a card
+     */
     private static boolean isValid(char value, Suit suit) {
         value = Character.toUpperCase(value);
         // value in valid chars AND suit is not null
         return (VALID_VALUE_CHARS.indexOf(value) != -1 && suit != null);
     }
 
+    /**
+     * Assigns new values for this card's value and suit
+     *
+     * @param value the new value for this card
+     * @param suit  the new suit for this card
+     * @return true if the set operation was successful
+     */
     public boolean set(char value, Suit suit) {
         if (isValid(value, suit)) {
             this.suit = suit;
@@ -135,6 +291,12 @@ class Card {
         return false;
     }
 
+    /**
+     * Checks whether this card is equivalent to another card (has the same suit and value)
+     *
+     * @param card the other card to evaluate against
+     * @return true if the two cards are equivalent
+     */
     public boolean equals(Card card) {
         // errorFlag (invalid) cards can be checked also (not sure if that is OK)
         // they are technically evaluable, but not useful for the app
@@ -152,6 +314,9 @@ class Card {
         return "" + this.getValue() + this.suitToUnicode();
     }
 
+    /**
+     * @return the corresponding Unicode character for a given suit
+     */
     private char suitToUnicode() {
         // note no breaks between case statements
         // since values are returned directly
@@ -170,6 +335,10 @@ class Card {
     }
 }
 
+/**
+ * Represents a hand of playing cards held by a single player
+ * It can hold several cards
+ */
 class Hand {
     public static int MAX_CARDS = 50; // no 'monster arrays'
     private Card[] myCards; //---------/ also called myArray in assignment desc
@@ -184,7 +353,7 @@ class Hand {
     }
 
     /**
-     * adds a card to the hand, usually from another play area, like a deck.
+     * Adds a card to the hand, usually from another play area, like a deck.
      *
      * @param card the card to add
      * @return true if card successfully taken
@@ -201,8 +370,12 @@ class Hand {
         }
     }
 
-    //   playCard(): Card       - plays a card to the table or player.
-    //removes & returns card from tail of array.
+    /**
+     * Plays the next card from this hand,
+     * removing it from the hand in the process
+     *
+     * @return the next card from this hand
+     */
     public Card playCard() {
         if (numCards >= 1) {
             numCards--;
@@ -214,21 +387,30 @@ class Hand {
         }
     }
 
-    //   void resetHand(): unit    - remove all cards from the hand (use simplest way)
-    //removes all cards from the hand
+    /**
+     * Resets this hand to its initial (empty) state
+     */
     public void resetHand() {
         numCards = 0;
         myCards = new Card[MAX_CARDS];
     }
 
     //   numCards accessor
+
+    /**
+     * @return the number of cards currently in this hand
+     */
     public int getNumCards() {
         return numCards;
     }
 
-    //   inspectCard(k: int): Card - returns the card at a given position or a Card with errorFlag = true if k is invalid
-    //accessor for an individual card
-    //returns a card with errorFlag=true if k is bad
+    /**
+     * Fetches the card in a given position in the hand without removing it.
+     *
+     * @param k the position to fetch the card from
+     * @return the card from the given position in the hand
+     * -OR- an invalid card if that position is invalid or unpopulated
+     */
     Card inspectCard(int k) {
         int myCardsLength = myCards.length;
         if (k >= 0 && k <= numCards && k <= myCardsLength) {
@@ -238,7 +420,7 @@ class Hand {
         }
     }
 
-    //   toString(): String   - for each card in myCards: card.toString()
+    @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(", ", "{ ", " }");
         if (numCards <= 0) {
@@ -252,115 +434,158 @@ class Hand {
     }
 }
 
+/**
+ * Represents the source of playing cards in a game
+ */
 class Deck {
-	public static int MAX_CARDS = 6 * 52; //establishes a maximum amount of cards for a single Deck
-	private static Card[]  masterpack;    // the masterpack, a single pack of cards with no special cards
-	private Card[] cards;                 //an array of all the cards in the current deck object
-	public int numPacks;                  //the number of packs in the current deck
-	private int topCard;                  //an int to keep track of the index of the top card
-	
-	private static void allocateMasterPack() { //creates the masterpack, which is a standard deck of cards to reuse each time we make a new Deck
-		int c = 0;                             //this will only be called on the first instance of the class being constructed
-		String VALID_VALUE_CHARS = "A23456789TJQK";
-		masterpack = new Card[52];
-		while(c < 52) {
-			for(int i = 0; i < VALID_VALUE_CHARS.length(); i++) {
-				masterpack[c] = new Card(VALID_VALUE_CHARS.charAt(i), Suit.clubs);
-				c++;
-				masterpack[c] = new Card(VALID_VALUE_CHARS.charAt(i), Suit.diamonds);
-				c++;
-				masterpack[c] = new Card(VALID_VALUE_CHARS.charAt(i), Suit.hearts);
-				c++;
-				masterpack[c] = new Card(VALID_VALUE_CHARS.charAt(i), Suit.spades);
-				c++;
-			}
-		}
-	}
-	
-	public Deck(int numPacks) {  //Deck constructor that takes an int numPacks which creates a deck with numPacks packs
-		int numCards = numPacks * 52;
-		this.numPacks = numPacks;
-		topCard = numCards - 1;
-		this.cards = new Card[numCards];
-		if (numCards > MAX_CARDS) {
-			System.out.println("Maximun amount of cards exceeded, number of packs set to 6");
-			numCards = MAX_CARDS;
-			this.numPacks = 6;
-			topCard = numCards - 1;
-		}
-		if (masterpack == null) {
-			allocateMasterPack();
-		}
-		for( int i = 0; i < numCards; i++) {
-			cards[i] = masterpack[i%52];
-		}
-	}
-	
-	public Deck() { //Deck constructor which takes no parameters and creates a Deck with one pack
-		topCard = 51;
-		this.numPacks = 1;
-		if (masterpack.length == 0) {
-			allocateMasterPack();
-		}
-		for(int i = 0; i< 52; i++) {
-			cards[i] = masterpack[i];
-		}
-	}
-	
-	public void init(int numPacks) { //reinitializes an existing Deck object with a chosen number of packs
-		int numCards = numPacks * 52;
-		topCard = numCards - 1;
-		this.numPacks = numPacks;
-		if (numCards > MAX_CARDS) {
-			System.out.println("Maximun amount of cards exceeded, number of packs set to 6");
-			numCards = MAX_CARDS;
-			this.numPacks = 6;
-			topCard = numCards - 1;
-		}
-		for( int i = 0; i < numCards; i++) {
-			cards[i] = masterpack[i%52];
-		}
-	}
-	
-	public void init() { //reinitializes an existing Deck object with one pack
-		int numCards = this.numPacks * 52;
-		topCard = numCards - 1;
-		for( int i = 0; i < numCards; i++) {
-			cards[i] = masterpack[i%52];
-		}
-	}
-	
-	public Card dealCard() { //returns the top card of the deck and removes it
-		Card dealtCard = cards[topCard];
-		cards[topCard] = null;
-		topCard--;
-		return dealtCard;
-	}
-	
-	public int getTopCard() { //returns the topCard integer
-		return this.topCard;
-	}
-	
-	public Card inspectCard(int k) { //takes an integer and accesses the deck at that index and returns a card object
-		if( k <= topCard) {
-			Card card =cards[k];
-			return card;
-		}
-		else return new Card('X', Suit.diamonds); //returns a card with errorFlag if index is out of range
-	}
-	
-	private void swap(int cardA, int cardB) { //helper function for shuffle, takes two ints and swaps the cards at those indexes
-		Card tempCard = cards[cardA];
-		cards[cardA] = cards[cardB];
-		cards[cardB] = tempCard;
-	}
-	
-	public void shuffle() { //goes through the deck 100 * the number of packs times and swaps two random cards each pass
-		int numCards = 52*this.numPacks;
-		for (int i = 0; i < this.numPacks * 100; i++) {
-			int cardA = (int)(Math.random() * numCards);
-			int cardB = (int)(Math.random() * numCards);
-			swap(cardA, cardB);
-		}
-	}
+    private static final int MAX_PACKS = 6;
+    private static final int CARDS_PER_PACK = 52;
+    public static final int MAX_CARDS = MAX_PACKS * CARDS_PER_PACK;
+    private static Card[] masterpack;
+
+    private Card[] cards;
+    private int numPacks;
+    private int topCard;
+
+    /**
+     * Creates a new deck using a given number of packs
+     *
+     * @param numPacks the number of packs within this deck
+     */
+    public Deck(int numPacks) {
+        this.init(numPacks);
+    }
+
+    /**
+     * Creates a new deck with a single pack
+     */
+    public Deck() {
+        this.init();
+    }
+
+    /**
+     * Populates the reusable master pack for decks
+     * only if it is empty.
+     */
+    private static void allocateMasterPack() {
+        if (Deck.masterpack != null) {
+            return;
+        }
+        Deck.masterpack = new Card[CARDS_PER_PACK];
+        int c = 0;
+
+        for (char value : Card.VALID_VALUE_CHARS.toCharArray()) {
+            for (Suit suit : Suit.values()) {
+                masterpack[c] = new Card(value, suit);
+                c++;
+            }
+        }
+    }
+
+    /**
+     * Refreshes this deck, discarding all current cards (if any)
+     * and populating it with fresh packs.
+     *
+     * @param numPacks the number of packs to refresh with
+     */
+    public void init(int numPacks) {
+        // init master pack if not yet populated
+        allocateMasterPack();
+
+        // enforce pack limit
+        if (numPacks > MAX_PACKS) {
+            numPacks = MAX_PACKS;
+            System.out.printf("Maximum number of packs exceeded, set to maximum: %d%n", numPacks);
+        }
+
+        this.numPacks = numPacks;
+
+        int numCards = numPacks * CARDS_PER_PACK;
+        this.cards = new Card[numCards];
+
+
+        // for the desired number of packs, copy the master pack into packs
+        for (int i = 0; i < numPacks; i++) {
+            System.arraycopy(Deck.masterpack, 0,
+                    this.cards, i * CARDS_PER_PACK,
+                    Deck.masterpack.length);
+        }
+
+        // set the position of the top card
+        this.topCard = numCards - 1; // zero-indexed
+    }
+
+    /**
+     * Refreshes this deck, discarding all current cards (if any)
+     * and populating it with a fresh pack.
+     */
+    public void init() { //reinitializes an existing Deck object with one pack
+        this.init(1);
+    }
+
+    /**
+     * Removes the top card of the deck and returns it
+     *
+     * @return the top card from the deck
+     */
+    public Card dealCard() { //returns the top card of the deck and removes it
+        Card dealtCard = cards[topCard];
+        cards[topCard] = null;
+        topCard--;
+        return dealtCard;
+    }
+
+    /**
+     * Fetches the top card from this deck without removing it
+     *
+     * @return the top card in this deck
+     */
+    public int getTopCard() { //returns the topCard integer
+        return this.topCard;
+    }
+
+    /**
+     * Fetches the card at a given position within the deck
+     * -OR- an invalid card if that position is not populated
+     * or the position is otherwise invalid
+     * <p>
+     * does not remove the card from the deck
+     *
+     * @param k the position of the card in the deck to inspect
+     * @return the card at the given position, or and invalid card if not found
+     */
+    public Card inspectCard(int k) { //takes an integer and accesses the deck at that index and returns a card object
+        if (k >= 0 && k <= topCard) {
+            return cards[k];
+        } else return new Card('X', Suit.diamonds); //returns a card with errorFlag if index is out of range
+    }
+
+    /**
+     * Exchanges the card in one position with the card in another position
+     *
+     * @param cardA the position of a card to swap
+     * @param cardB the position of another card to swap
+     */
+    private void swap(int cardA, int cardB) { //helper function for shuffle, takes two ints and swaps the cards at those indexes
+        if (cardA == cardB) {
+            return;
+        }
+
+        Card tempCard = cards[cardA];
+        cards[cardA] = cards[cardB];
+        cards[cardB] = tempCard;
+    }
+
+    /**
+     * Randomizes the order of the cards within this deck
+     */
+    public void shuffle() { //
+        int numCards = this.topCard + 1;
+        int shuffleSteps = numCards * 25;
+        for (int i = 0; i < shuffleSteps; i++) {
+            int cardA = (int) (Math.random() * numCards);
+            int cardB = (int) (Math.random() * numCards);
+            swap(cardA, cardB);
+        }
+    }
 }
